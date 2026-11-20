@@ -1,0 +1,6 @@
+{
+  "name": "Steezehub",
+  "description": "Online marketplace for UCC campus students to discover trusted sellers, browse goods and services, and connect through secure real-time messaging.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

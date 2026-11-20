@@ -1,0 +1,885 @@
+{
+  "entities": {
+    "UserPublicProfile": {
+      "title": "UserPublicProfile",
+      "description": "Public UCC campus student/seller profile without PII.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "hall": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "program": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 80
+        },
+        "bio": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 300
+        },
+        "photoURL": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500
+        },
+        "referralCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "acceptedPaymentMethods": {
+          "type": "array"
+        },
+        "sellerTier": {
+          "type": "string",
+          "enum": ["micro", "standard", "premium"]
+        },
+        "requestedSellerTier": {
+          "type": "string",
+          "enum": ["micro", "standard", "premium"]
+        },
+        "sellerTierStatus": {
+          "type": "string",
+          "enum": ["pending", "approved"]
+        },
+        "verifiedCampus": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "hall",
+        "verifiedCampus",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated private student PII (email, phone, and preferred payout number).",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 30
+        },
+        "preferredPaymentMethod": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 40
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "email",
+        "updatedAt"
+      ]
+    },
+    "FavoriteItem": {
+      "title": "FavoriteItem",
+      "description": "Saved wishlist/favorite listing belonging to a specific student.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "listingPriceGhs": {
+          "type": "number"
+        },
+        "listingImageUrl": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 150000
+        },
+        "sellerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "sellerHall": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "meetupZone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "grouping": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "listingId",
+        "listingTitle",
+        "listingPriceGhs",
+        "sellerName",
+        "sellerHall",
+        "meetupZone",
+        "createdAt"
+      ]
+    },
+    "Listing": {
+      "title": "Listing",
+      "description": "Campus good or service published by a UCC seller with grouping, brand, and payment methods.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "sellerHall": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1200
+        },
+        "type": {
+          "type": "string",
+          "enum": ["good", "service"]
+        },
+        "grouping": {
+          "type": "string",
+          "enum": [
+            "Campus Essentials",
+            "Hall Life & Dorm",
+            "Academic & Tech",
+            "Fashion & Beauty",
+            "Food & Errands",
+            "Events & Tickets"
+          ]
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "Apparel & Thrift",
+            "Tech & Accessories",
+            "Textbooks & Study",
+            "Food & Drinks",
+            "Grooming & Beauty",
+            "Design & Repairs",
+            "Laundry & Errands"
+          ]
+        },
+        "priceGhs": {
+          "type": "number"
+        },
+        "priceUnit": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 30
+        },
+        "acceptedPaymentMethods": {
+          "type": "array"
+        },
+        "meetupZone": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "conditionOrTurnaround": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40
+        },
+        "imageUrl": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 150000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "paused", "sold"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "sellerId",
+        "sellerName",
+        "sellerHall",
+        "title",
+        "description",
+        "type",
+        "grouping",
+        "brand",
+        "category",
+        "priceGhs",
+        "priceUnit",
+        "acceptedPaymentMethods",
+        "meetupZone",
+        "conditionOrTurnaround",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Real-time 1-on-1 conversation between a UCC student buyer and seller.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "listingPriceGhs": {
+          "type": "number"
+        },
+        "listingImageUrl": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 150000
+        },
+        "meetupZone": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "paymentMethod": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40
+        },
+        "buyerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "buyerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "participantIds": {
+          "type": "array"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "reserved", "completed"]
+        },
+        "lastMessageText": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1000
+        },
+        "lastMessageSenderId": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 128
+        },
+        "lastMessageAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "listingId",
+        "listingTitle",
+        "listingPriceGhs",
+        "meetupZone",
+        "buyerId",
+        "buyerName",
+        "sellerId",
+        "sellerName",
+        "participantIds",
+        "status",
+        "lastMessageText",
+        "lastMessageSenderId",
+        "lastMessageAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Immutable real-time chat message within a conversation.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "conversationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "senderId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "senderName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "participantIds": {
+          "type": "array"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["text", "meetup_proposal", "offer", "payment_update"]
+        },
+        "offerAmountGhs": {
+          "type": "number"
+        },
+        "proposedMeetupZone": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 80
+        },
+        "proposedPaymentMethod": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 40
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "conversationId",
+        "senderId",
+        "senderName",
+        "participantIds",
+        "text",
+        "kind",
+        "createdAt"
+      ]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Verified student rating and review for a campus listing.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "reviewerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "reviewerName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "reviewerHall": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "rating": {
+          "type": "integer"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 600
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "listingId",
+        "listingTitle",
+        "sellerId",
+        "reviewerId",
+        "reviewerName",
+        "reviewerHall",
+        "rating",
+        "comment",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ReferralCode": {
+      "title": "ReferralCode",
+      "description": "Direct lookup mapping from a referral code to its owner.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["code", "ownerUid", "ownerName", "createdAt"]
+    },
+    "Referral": {
+      "title": "Referral",
+      "description": "Customer referral record tracking campus invite credit.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "referrerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "referrerCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "referrerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "referredUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "referredName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "status": {
+          "type": "string",
+          "enum": ["qualified", "rewarded"]
+        },
+        "rewardGhs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "referrerUid",
+        "referrerCode",
+        "referrerName",
+        "referredUid",
+        "referredName",
+        "status",
+        "rewardGhs",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Completed campus order receipt recorded when a seller marks a listing as sold.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "listingPriceGhs": {
+          "type": "number"
+        },
+        "listingImageUrl": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 150000
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "grouping": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "sellerHall": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "buyerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "buyerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "participantIds": {
+          "type": "array"
+        },
+        "meetupZone": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "paymentMethod": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40
+        },
+        "conversationId": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "enum": ["completed"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "listingId",
+        "listingTitle",
+        "listingPriceGhs",
+        "brand",
+        "grouping",
+        "sellerId",
+        "sellerName",
+        "sellerHall",
+        "buyerId",
+        "buyerName",
+        "participantIds",
+        "meetupZone",
+        "paymentMethod",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ListingPhoto": {
+      "title": "ListingPhoto",
+      "description": "Additional gallery photo uploaded by a seller for a product or service listing.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "listingStatus": {
+          "type": "string",
+          "enum": ["active", "paused", "sold"]
+        },
+        "imageUrl": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 150000
+        },
+        "orderIndex": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "listingId",
+        "sellerId",
+        "listingStatus",
+        "imageUrl",
+        "orderIndex",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserPublicProfile" },
+      "description": "Public campus seller and student profiles without PII."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Private student PII isolated from public reads."
+    },
+    "/users/{userId}/favorites/{listingId}": {
+      "schema": { "$ref": "#/entities/FavoriteItem" },
+      "description": "Saved wishlist/favorite listings for a student account."
+    },
+    "/listings/{listingId}": {
+      "schema": { "$ref": "#/entities/Listing" },
+      "description": "Goods and services offered across UCC campus halls and markets."
+    },
+    "/listings/{listingId}/photos/{photoId}": {
+      "schema": { "$ref": "#/entities/ListingPhoto" },
+      "description": "Gallery photos uploaded by sellers for each listing."
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "1-on-1 buyer-seller conversation threads anchored to a listing."
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Real-time immutable messages inside a conversation thread."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Student ratings and reviews anchored to marketplace listings."
+    },
+    "/referralCodes/{code}": {
+      "schema": { "$ref": "#/entities/ReferralCode" },
+      "description": "Exact-match lookup table for referral invite codes."
+    },
+    "/referrals/{referralId}": {
+      "schema": { "$ref": "#/entities/Referral" },
+      "description": "Student referral tracking and admin-approved campus credit rewards."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Completed campus order receipts preserved in buyer and seller order history."
+    }
+  }
+}

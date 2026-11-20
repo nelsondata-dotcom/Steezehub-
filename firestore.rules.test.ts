@@ -1,0 +1,106 @@
+/**
+ * Phase 0 Payload-First Security TDD suite for Steezehub Firestore Rules.
+ * Verifies that all Dirty Dozen adversarial payloads return PERMISSION_DENIED
+ * when evaluated against the Firestore Rules Emulator.
+ */
+export const dirtyDozenPayloads = [
+  {
+    name: '01. Shadow Field Injection on Profile',
+    path: '/users/attackerUid',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    payload: {
+      uid: 'attackerUid',
+      displayName: 'Attacker',
+      hall: 'Valco Hall',
+      verifiedCampus: true,
+      isAdmin: true,
+      createdAt: 'SERVER_TIMESTAMP',
+      updatedAt: 'SERVER_TIMESTAMP',
+    },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '02. PII Leak Attempt',
+    path: '/users/victimUid/private/info',
+    operation: 'get',
+    auth: { uid: 'attackerUid', email_verified: true },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '03. Unverified Email Listing Create',
+    path: '/listings/listing_unverified',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: false },
+    payload: { id: 'listing_unverified', sellerId: 'attackerUid' },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '04. Seller Spoofing',
+    path: '/listings/listing_spoof',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    payload: { id: 'listing_spoof', sellerId: 'victimUid' },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '05. Oversized ID Poisoning',
+    path: `/listings/${'a'.repeat(140)}`,
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '06. Poisoned Price Type',
+    path: '/listings/listing_bad_price',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    payload: { priceGhs: -25 },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '07. Timestamp Forgery',
+    path: '/listings/listing_bad_time',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    payload: { createdAt: '2020-01-01T00:00:00Z' },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '08. Post-Sold Listing Tampering',
+    path: '/listings/listing_sold',
+    operation: 'update',
+    auth: { uid: 'sellerUid', email_verified: true },
+    payload: { priceGhs: 1 },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '09. Unauthorized Conversation Scraping',
+    path: '/conversations',
+    operation: 'list',
+    auth: { uid: 'attackerUid', email_verified: true },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '10. Orphaned Message Injection',
+    path: '/conversations/nonexistent_conv/messages/msg1',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '11. Eavesdropper Message Injection',
+    path: '/conversations/conv_a_b/messages/msg_intrude',
+    operation: 'create',
+    auth: { uid: 'attackerUid', email_verified: true },
+    expected: 'PERMISSION_DENIED',
+  },
+  {
+    name: '12. Message History Tampering',
+    path: '/conversations/conv_a_b/messages/msg_1',
+    operation: 'update',
+    auth: { uid: 'buyerUid', email_verified: true },
+    payload: { text: 'Edited receipt' },
+    expected: 'PERMISSION_DENIED',
+  },
+];
